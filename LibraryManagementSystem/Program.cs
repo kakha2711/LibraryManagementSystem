@@ -14,8 +14,9 @@ namespace LibraryManagementSystem
             Console.InputEncoding = System.Text.Encoding.Unicode;
 
 
-            var context = new LibraryManagementSystemDbContext();
+            LibraryManagementSystemDbContext context = new LibraryManagementSystemDbContext();
 
+            
 
             //========================================add library========================
             //Console.Write("ბიბლიოთეკის სახელი: ");
@@ -150,44 +151,44 @@ namespace LibraryManagementSystem
             //========================================get bookDetale========================
 
 
-            List<Book> books = context.Book
-                                        .Include(b => b.Library)
-                                        .Include(b => b.BookDetails)
-                                        .ToList();
+            //List<Book> books = context.Book
+            //                            .Include(b => b.Library)
+            //                            .Include(b => b.BookDetails)
+            //                            .ToList();
 
 
-            var table = new Table();
+            //var table = new Table();
 
-            table.AddColumn("სათაური");
-            table.AddColumn("ავტორი");
-            table.AddColumn("ბიბლიოთეკა");
-            table.AddColumn("გვერდების რაოდენობა");
-            table.AddColumn("ფასი");
+            //table.AddColumn("სათაური");
+            //table.AddColumn("ავტორი");
+            //table.AddColumn("ბიბლიოთეკა");
+            //table.AddColumn("გვერდების რაოდენობა");
+            //table.AddColumn("ფასი");
 
-            //table.AddRow("Alice", "North", "$12,400");
-            //table.AddRow("Bob", "South", "$8,750");
-            //table.AddRow("Carol", "West", "$15,200");
-
-
-            foreach (var item in books)
-            {
-                var tt = item.Title;
-                var tt1 = item.Author;
-                var tt2 = item.Library.Name;
-                var tt3 = item.BookDetails== null ? "N/A" : item.BookDetails.PageCount.ToString();
-                var tt4 = item.Price == null ? "N/A" : item.Price.ToString();
-
-                table.AddRow(
-                                tt,
-                                tt1,
-                                tt2,
-                                tt3,
-                                tt4);
-                //Console.WriteLine($"სათაური: {item.Title}, ბიბლიოთეკა: {item.Library.Name}");
-            }
+            ////table.AddRow("Alice", "North", "$12,400");
+            ////table.AddRow("Bob", "South", "$8,750");
+            ////table.AddRow("Carol", "West", "$15,200");
 
 
-            AnsiConsole.Write(table);
+            //foreach (var item in books)
+            //{
+            //    var tt = item.Title;
+            //    var tt1 = item.Author;
+            //    var tt2 = item.Library.Name;
+            //    var tt3 = item.BookDetails== null ? "N/A" : item.BookDetails.PageCount.ToString();
+            //    var tt4 = item.Price == null ? "N/A" : item.Price.ToString();
+
+            //    table.AddRow(
+            //                    tt,
+            //                    tt1,
+            //                    tt2,
+            //                    tt3,
+            //                    tt4);
+            //    //Console.WriteLine($"სათაური: {item.Title}, ბიბლიოთეკა: {item.Library.Name}");
+            //}
+
+
+            //AnsiConsole.Write(table);
 
 
 

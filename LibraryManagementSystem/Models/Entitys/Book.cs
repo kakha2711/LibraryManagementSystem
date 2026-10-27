@@ -24,5 +24,7 @@ namespace LibraryManagementSystem.Models.Entitys
        
         //public int BookDetailsId { get; set; }
         public BookDetails BookDetails { get; set; }
+
+        public ICollection<Genre> Genres { get; set; }
     }
 }
