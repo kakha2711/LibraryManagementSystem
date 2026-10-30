@@ -7,14 +7,14 @@ namespace LibraryManagementSystem.Models.Entitys
     public class Book
     {
         public int Id { get; set; }
-        [Required]
-        [MaxLength(150)]
+        //[Required]
+        //[MaxLength(150)]
         public string Title { get; set; }
-        [Required]
-        [MaxLength(150)]
+        //[Required]
+        //[MaxLength(150)]
         public string Author { get; set; }
-        [Required]
-        [Range(0, double.MaxValue, ErrorMessage = "Price must be a positive number.")]
+        //[Required]
+        //[Range(0, double.MaxValue, ErrorMessage = "Price must be a positive number.")]
         public double Price { get; set; }
 
 

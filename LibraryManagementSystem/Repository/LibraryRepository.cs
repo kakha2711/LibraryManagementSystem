@@ -64,17 +64,25 @@ namespace LibraryManagementSystem.Repository
 
             using var reader = command.ExecuteReader();
 
-           
+
+            while (reader.Read())
+            {
                 if (reader.HasRows)
                 {
-                     library = new Library
+                    var tt0 = reader.GetInt32(0);
+                    var dd0 = reader.GetString(1);
+                    var ss = reader.GetString(2);
+
+                    library = new Library
                     {
                         Id = reader.GetInt32(0),
                         Name = reader.GetString(1),
                         Address = reader.GetString(2)
                     };
-                    
                 }
+            }
+
+            
             
 
             return Task.FromResult(library);
@@ -100,12 +108,12 @@ namespace LibraryManagementSystem.Repository
 
             List<Library> getAllLibrerynew = GetAllLibreryAsync().Result;
 
-            string message = getAllLibrerynew.Count > getAllLibreryOld.Count ? "Library added successfully." : "Failed to add library.";
+            string message = getAllLibrerynew.Count > getAllLibreryOld.Count ? "ბიბლიოთეკა წარმატებით დამატებულია." : "ბიბლიოთეკის დამატება ვერ მოხდა.";
 
             return Task.FromResult(message);
         }
 
-        public Task<string> UpdateLibreryAsync(Library library)
+        public Task<string> UpdateLibreryAsync(Library library, int id)
         {
             List<Library> getAllLibreryOld = GetAllLibreryAsync().Result;
 
@@ -124,7 +132,9 @@ namespace LibraryManagementSystem.Repository
             command.ExecuteNonQuery();
 
             List<Library> getAllLibreryNew = GetAllLibreryAsync().Result;
-            string message = getAllLibreryNew.Count > getAllLibreryOld.Count ? "Library updated successfully." : "Failed to update library.";
+
+
+            string message = library.Name == getAllLibreryNew.FirstOrDefault(x => x.Id == id)?.Name ? "Library updated successfully." : "Failed to update library.";
 
             return Task.FromResult(message);
         }
@@ -132,6 +142,8 @@ namespace LibraryManagementSystem.Repository
         public Task<string> DeleteLibreryAsync(int id)
         {
             List<Library> getAllLibreryOld = GetAllLibreryAsync().Result;
+
+            int count  = getAllLibreryOld.Count;
 
             const string query = "DELETE FROM Library WHERE Id = @Id";
 
@@ -146,7 +158,10 @@ namespace LibraryManagementSystem.Repository
             command.ExecuteNonQuery();
 
             List<Library> getAllLibreryNew = GetAllLibreryAsync().Result;
-            string message = getAllLibreryNew.Count < getAllLibreryOld.Count ? "Library deleted successfully." : "Failed to delete library.";
+
+            int countnew = GetAllLibreryAsync().Result.Count;
+
+            string message = countnew < count ? "ბიბლიოთეკა წარმატებით წაიშალა." : "ბიბლიოთეკის წაშლა ვერ მოხდა.";
 
             return Task.FromResult(message);
         }

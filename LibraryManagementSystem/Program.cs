@@ -1,6 +1,7 @@
 ﻿using LibraryManagementSystem.Data;
 using LibraryManagementSystem.Models.DTOs;
 using LibraryManagementSystem.Models.Entitys;
+using LibraryManagementSystem.Service;
 using Microsoft.EntityFrameworkCore;
 using Spectre.Console;
 
@@ -16,8 +17,65 @@ namespace LibraryManagementSystem
 
             LibraryManagementSystemDbContext context = new LibraryManagementSystemDbContext();
 
-            
+            LibreryService libreryService = new LibreryService(new Repository.LibraryRepository(context));
 
+
+            //========================================add library========================
+            //Console.WriteLine("ბიბლიოთეკის მართვის სისტემა");
+            //Console.Write("ბიბლიოთეკის სახელი: ");
+            //string libraryName = Console.ReadLine();
+
+            //Console.Write("ბიბლიოთეკის მისამართი: ");
+            //string libraryAddress = Console.ReadLine();
+
+            //libreryService.CreateLibreryAsync(new LibraryDTO
+            //{
+            //    Name = libraryName,
+            //    Address = libraryAddress
+            //}).Wait();
+
+            //========================end add library========================
+
+            //========================================get all library========================
+
+            //libreryService.GetAllLibreryAsync().Result.ForEach(library =>
+            //{
+            //    Console.WriteLine($"ბიბლიოთეკის სახელი: {library.Name},\n მისამართი: {library.Address}");
+            //});
+
+            //========================end get all library========================
+
+            //========================================get library by id========================
+
+            //LibraryDTO librery = libreryService.GetLibreryByIdAsync(2).Result;
+
+            //Console.WriteLine($" ბიბლიოთეკის სახელი: {librery.Name},\n მისამართი: {librery.Address}");
+
+            //========================end get library by id========================
+
+            //========================================Update library========================
+
+            //libreryService.UpdateLibreryAsync(2, new LibraryDTO
+            //{
+            //    Name = "Updated Library Name",
+            //    Address = "Updated Library Address"
+            //}).Wait();
+
+            //libreryService.UpdateLibreryAsync(2, new LibraryDTO
+            //{
+            //    Name = "ფოთის მთავარი ბიბლიოთეკა",
+            //    Address = "ზუგდიდის ქ. 44"
+            //}).Wait();
+
+            //========================end Update library========================
+
+            //========================================Delete library========================
+
+            libreryService.DeleteLibreryAsync(5).Wait();
+
+            //========================end Delete library========================
+
+            #region OuldVersion
             //========================================add library========================
             //Console.Write("ბიბლიოთეკის სახელი: ");
             //var libraryName = Console.ReadLine();
@@ -195,7 +253,7 @@ namespace LibraryManagementSystem
 
 
             //========================end get bookDetale========================
-
+            #endregion
 
         }
     }

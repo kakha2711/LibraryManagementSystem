@@ -16,24 +16,24 @@ namespace LibraryManagementSystem.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.13")
+                .HasAnnotation("ProductVersion", "10.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("BookGenre", b =>
                 {
-                    b.Property<int>("BooksId")
+                    b.Property<int>("BookId")
                         .HasColumnType("int");
 
-                    b.Property<int>("GenresId")
+                    b.Property<int>("GenreId")
                         .HasColumnType("int");
 
-                    b.HasKey("BooksId", "GenresId");
+                    b.HasKey("BookId", "GenreId");
 
-                    b.HasIndex("GenresId");
+                    b.HasIndex("GenreId");
 
-                    b.ToTable("BookGenre");
+                    b.ToTable("BookGenres", (string)null);
                 });
 
             modelBuilder.Entity("LibraryManagementSystem.Models.Entitys.Book", b =>
@@ -46,19 +46,19 @@ namespace LibraryManagementSystem.Migrations
 
                     b.Property<string>("Author")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("LibraryId")
                         .HasColumnType("int");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(4,2)");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
 
@@ -70,10 +70,7 @@ namespace LibraryManagementSystem.Migrations
             modelBuilder.Entity("LibraryManagementSystem.Models.Entitys.BookDetails", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("BookId")
                         .HasColumnType("int");
@@ -91,10 +88,12 @@ namespace LibraryManagementSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookId")
-                        .IsUnique();
+                    b.ToTable("BookDetail", t =>
+                        {
+                            t.HasCheckConstraint("CK_BookDetails_PageCount", "PageCount > 0");
 
-                    b.ToTable("BookDetail");
+                            t.HasCheckConstraint("CK_BookDetails_PublishedYear", "PublishedYear >= 1000 AND PublishedYear <= 2023");
+                        });
                 });
 
             modelBuilder.Entity("LibraryManagementSystem.Models.Entitys.Genre", b =>
@@ -107,7 +106,8 @@ namespace LibraryManagementSystem.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -134,20 +134,20 @@ namespace LibraryManagementSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Librarie");
+                    b.ToTable("Library");
                 });
 
             modelBuilder.Entity("BookGenre", b =>
                 {
                     b.HasOne("LibraryManagementSystem.Models.Entitys.Book", null)
                         .WithMany()
-                        .HasForeignKey("BooksId")
+                        .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("LibraryManagementSystem.Models.Entitys.Genre", null)
                         .WithMany()
-                        .HasForeignKey("GenresId")
+                        .HasForeignKey("GenreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -167,7 +167,7 @@ namespace LibraryManagementSystem.Migrations
                 {
                     b.HasOne("LibraryManagementSystem.Models.Entitys.Book", "Book")
                         .WithOne("BookDetails")
-                        .HasForeignKey("LibraryManagementSystem.Models.Entitys.BookDetails", "BookId")
+                        .HasForeignKey("LibraryManagementSystem.Models.Entitys.BookDetails", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

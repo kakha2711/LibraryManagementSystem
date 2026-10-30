@@ -9,7 +9,7 @@ namespace LibraryManagementSystem.Interface.IRepository
         Task<List<Library>> GetAllLibreryAsync();
         Task<Library> GetLibreryByIdAsync(int id);
         Task<String> AddLibreryAsync(Library library);
-        Task<String> UpdateLibreryAsync(Library library);
+        Task<String> UpdateLibreryAsync(Library library, int id);
         Task<String> DeleteLibreryAsync(int id);
 
     }

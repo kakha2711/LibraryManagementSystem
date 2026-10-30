@@ -5,13 +5,26 @@
 namespace LibraryManagementSystem.Migrations
 {
     /// <inheritdoc />
-    public partial class LibraryManagement : Migration
+    public partial class Library : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Librarie",
+                name: "Genres",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Genres", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Library",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -21,7 +34,7 @@ namespace LibraryManagementSystem.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Librarie", x => x.Id);
+                    table.PrimaryKey("PK_Library", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -30,18 +43,18 @@ namespace LibraryManagementSystem.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
-                    Author = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Author = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(4,2)", nullable: false),
                     LibraryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Book", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Book_Librarie_LibraryId",
+                        name: "FK_Book_Library_LibraryId",
                         column: x => x.LibraryId,
-                        principalTable: "Librarie",
+                        principalTable: "Library",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -50,8 +63,7 @@ namespace LibraryManagementSystem.Migrations
                 name: "BookDetail",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     ISBN = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     PageCount = table.Column<int>(type: "int", nullable: false),
                     PublishedYear = table.Column<int>(type: "int", nullable: false),
@@ -60,10 +72,36 @@ namespace LibraryManagementSystem.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_BookDetail", x => x.Id);
+                    table.CheckConstraint("CK_BookDetails_PageCount", "PageCount > 0");
+                    table.CheckConstraint("CK_BookDetails_PublishedYear", "PublishedYear >= 1000 AND PublishedYear <= 2023");
                     table.ForeignKey(
-                        name: "FK_BookDetail_Book_BookId",
+                        name: "FK_BookDetail_Book_Id",
+                        column: x => x.Id,
+                        principalTable: "Book",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BookGenres",
+                columns: table => new
+                {
+                    BookId = table.Column<int>(type: "int", nullable: false),
+                    GenreId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookGenres", x => new { x.BookId, x.GenreId });
+                    table.ForeignKey(
+                        name: "FK_BookGenres_Book_BookId",
                         column: x => x.BookId,
                         principalTable: "Book",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BookGenres_Genres_GenreId",
+                        column: x => x.GenreId,
+                        principalTable: "Genres",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -74,10 +112,9 @@ namespace LibraryManagementSystem.Migrations
                 column: "LibraryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookDetail_BookId",
-                table: "BookDetail",
-                column: "BookId",
-                unique: true);
+                name: "IX_BookGenres_GenreId",
+                table: "BookGenres",
+                column: "GenreId");
         }
 
         /// <inheritdoc />
@@ -87,10 +124,16 @@ namespace LibraryManagementSystem.Migrations
                 name: "BookDetail");
 
             migrationBuilder.DropTable(
+                name: "BookGenres");
+
+            migrationBuilder.DropTable(
                 name: "Book");
 
             migrationBuilder.DropTable(
-                name: "Librarie");
+                name: "Genres");
+
+            migrationBuilder.DropTable(
+                name: "Library");
         }
     }
 }
