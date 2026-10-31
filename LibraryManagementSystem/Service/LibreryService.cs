@@ -45,6 +45,19 @@ namespace LibraryManagementSystem.Service
 
         public Task<string> CreateLibreryAsync(LibraryDTO libraryDTO)
         {
+            var existingLibrary = _libraryRepository.GetAllLibreryAsync().Result.All(l => l.Name != libraryDTO.Name);
+
+            var existingLibrary0 = _libraryRepository.GetAllLibreryAsync().Result.FindAll(l => l.Name == libraryDTO.Name);
+
+            var createdLibrary = "";
+
+            if (!existingLibrary)
+            {
+                 createdLibrary = $"Library with name '{libraryDTO.Name}' ამ სახელით უკვე დამატებულია.";
+                return Task.FromResult(createdLibrary);
+            }
+
+            //Task.FromResult($"Library with name '{libraryDTO.Name}' already exists.")
 
             Library createdLibraryDTO = new Library
             {
@@ -53,9 +66,9 @@ namespace LibraryManagementSystem.Service
             };
 
 
-            var createdLibrary = _libraryRepository.AddLibreryAsync(createdLibraryDTO).Result;
+            createdLibrary = _libraryRepository.AddLibreryAsync(createdLibraryDTO).Result;
 
-            Console.WriteLine($"createdLibrary: {createdLibrary}");
+            //Console.WriteLine($"createdLibrary: {createdLibrary}");
 
             return Task.FromResult(createdLibrary);
         }

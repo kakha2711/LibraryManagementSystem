@@ -21,18 +21,20 @@ namespace LibraryManagementSystem
 
 
             //========================================add library========================
-            //Console.WriteLine("ბიბლიოთეკის მართვის სისტემა");
-            //Console.Write("ბიბლიოთეკის სახელი: ");
-            //string libraryName = Console.ReadLine();
+            Console.WriteLine("ბიბლიოთეკის მართვის სისტემა");
+            Console.Write("ბიბლიოთეკის სახელი: ");
+            string libraryName = Console.ReadLine();
 
-            //Console.Write("ბიბლიოთეკის მისამართი: ");
-            //string libraryAddress = Console.ReadLine();
+            Console.Write("ბიბლიოთეკის მისამართი: ");
+            string libraryAddress = Console.ReadLine();
 
-            //libreryService.CreateLibreryAsync(new LibraryDTO
-            //{
-            //    Name = libraryName,
-            //    Address = libraryAddress
-            //}).Wait();
+            var library =libreryService.CreateLibreryAsync(new LibraryDTO
+            {
+                Name = libraryName,
+                Address = libraryAddress
+            }).Result;
+
+            Console.WriteLine(library);
 
             //========================end add library========================
 
@@ -71,7 +73,7 @@ namespace LibraryManagementSystem
 
             //========================================Delete library========================
 
-            libreryService.DeleteLibreryAsync(5).Wait();
+            //libreryService.DeleteLibreryAsync(5).Wait();
 
             //========================end Delete library========================
 
